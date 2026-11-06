@@ -111,9 +111,8 @@ a{color:var(--acc)}
 events emitted by the Foreguild fee ledger contract [address] on Gnosis
 Chain with a block timestamp between [start UTC] and [end UTC]?
 FeeRetained is emitted by the contract only when a task's 14-day
-dispute window has closed, no DisputeOpen event is still unresolved
-at the window's close for that task, and no DisputeUpheld event exists
-for it. DisputeUpheld is emitted only by the Kleros arbitrator adapter
+dispute window has closed, every dispute for that task, appeals
+included, is final, and no DisputeUpheld event exists for it. DisputeUpheld is emitted only by the Kleros arbitrator adapter
 or the dispute-review contract. The answer is the capped total the
 contract emits in its PeriodClosed event for that period (closePeriod
 applies the per-cluster cap to these events, using the cluster list
