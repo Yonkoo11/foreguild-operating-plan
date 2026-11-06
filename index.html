@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Foreguild: Capped Futarchy Operating Plan</title>
+<title>Foreguild: let the market steer only what the market can afford to be wrong about</title>
 <style>
 :root{--bg:#fbfaf7;--fg:#1c1b19;--mute:#6a665e;--line:#dcd7cc;--acc:#0b5d4b;--warn:#8a3b12;--card:#f2efe7}
 @media (prefers-color-scheme:dark){:root{--bg:#171715;--fg:#ece9e1;--mute:#a09b90;--line:#3a3833;--acc:#5fc4a8;--warn:#e59a6a;--card:#22211e}}
@@ -30,7 +30,7 @@ a{color:var(--acc)}
 <body>
 <main>
 
-<p class="sub">Seer FAO Operating Plan Contest · 6 Nov 2026</p>
+<p class="sub">Seer FAO Operating Plan Contest · updated 7 Nov 2026</p>
 <h1>Foreguild: let the market steer only what the market can afford to be wrong about</h1>
 
 <div class="box">
@@ -39,18 +39,18 @@ a{color:var(--acc)}
 <li><b>Sell one kind of work:</b> software and data tasks that a script can accept or reject. The guild keeps a fee only when the script passes and the 14-day refund window closes.</li>
 <li><b>Do not live on small bounties.</b> The model below shows a $5 average ticket cannot break even at any take rate from 6% to 12%. The plan starts at $40+ tickets. (At 12% the $5 margin is exactly zero given my $0.60 cost assumption; 13% would just clear it.)</li>
 <li><b>Futarchy decides policy</b> (fees, bond sizes, routing, which verticals open) through Seer's conditional-token markets, inside the cap below.</li>
-<li><b>The new rule: every market has a stake cap.</b> A market may only bind a decision worth no more than what it would cost an attacker to manipulate that market. Bigger decisions use the market as a signal only, and a slower path decides.</li>
-<li><b>Primary design uses only what Seer ships:</b> price-based futarchy on a Foreguild token whose backing is retained fees. A slower retained-fee question on Reality.eth (section 6) is an audit layer. If Seer cannot host it, the plan still works without it.</li>
+<li><b>Every market has a stake cap.</b> A market may only bind a decision worth no more than what it would cost an attacker to manipulate that market. Bigger decisions use the market as a signal only, and a slower path decides.</li>
+<li><b>Primary design is built on what Seer ships</b> (price-based YES/NO pools) with Foreguild's own rules on top: a Foreguild token whose backing is retained fees, a pass margin and a time-weighted price. A slower retained-fee question on Reality.eth (section 6) is an audit layer. If Seer cannot host it, the plan still works without it.</li>
 <li><b>Every number here is labelled Fact or Assumption</b> (section 11). Run <code>model.py</code> to reproduce every table.</li>
 </ol>
 </div>
 
 <h2>1. What I looked at before writing this</h2>
-<p>I read Seer's own docs pages (futarchy, conditional markets, reporting, disputes) and poidh's docs, and read the other entries to this contest. Three things shaped the plan:</p>
+<p>I read Seer's own docs pages (futarchy, conditional markets, reporting, disputes) and poidh's docs, and fetched the public entries to this contest that I could open. Three things shaped the plan:</p>
 <ul>
 <li>Seer's shipped futarchy is <b>price-based</b>: YES and NO token pairs trade in two pools, and it is only on Gnosis Chain. An invalid market counts as a failed proposal. (<a href="https://docs.seer.pm/app/futarchy-markets.md">docs.seer.pm/app/futarchy-markets</a>)</li>
 <li>Reality.eth needs each new answer to post at least twice the previous bond. A Kleros dispute takes up to 14 days 12 hours, plus 11 days per appeal. (<a href="https://docs.seer.pm/app/report-answer.md">report-answer</a>, <a href="https://docs.seer.pm/app/raise-a-dispute.md">raise-a-dispute</a>)</li>
-<li>In the entries I could read, none gave a number for what it costs to move its own market. That gap is what the stake cap fills.</li>
+<li>No entry I fetched states a dollar cost to move its own market (one lists "abnormal slippage" as a reason to abstain). The stake cap puts a number on it, with the assumptions stated.</li>
 </ul>
 
 <h2>2. What the agents do</h2>
@@ -95,8 +95,9 @@ a{color:var(--acc)}
 <tr><td>$100,000</td><td>10%</td><td>$4,881</td><td>$488</td><td>$488</td></tr>
 <tr><td>$500,000</td><td>10%</td><td>$24,404</td><td>$2,440</td><td>$2,440</td></tr>
 </table>
-<p>Early on, futarchy is advisory. Pools of this size can bind only small decisions: a $500k pool binds up to about $2,400 a year of value. Most fee and budget decisions are bigger, so they use the market price as an input, and a slower path decides: a human review tier, a published reasoning note, and the 48-hour guardian veto. To bind a $3,200 yearly change (a 2-point fee move on $160k of annual volume) at a 10% margin, the pool needs about $650k per side; I have no plan to fund that by day 90. The loss figure is a floor on attack cost: the price is read as a time-weighted average over the window, so an attacker keeps paying slippage while arbitrage pulls the price back. The first 90-day job is to measure real depth and slippage on a live Seer pool and raise the cap only as far as that data supports. The market's authority starts small and grows with measured depth.</p>
-<p>Measured depth is smaller than that table. DefiLlama lists Seer's total liquidity across all markets at about $329,000 on 6 November 2026, of which about $298,000 is on Gnosis (<a href="https://api.llama.fi/protocol/seer">api.llama.fi/protocol/seer</a>). A single $500,000 pool is therefore larger than everything Seer holds today. At current depths the stake cap binds almost nothing, so the first markets run advisory only. Seer's Gnosis pool data (Swapr subgraph, 7 November 2026) agrees: of 3,296 pools, 393 hold more than $1 and the median of those holds about $10; 11 hold more than $1,000 and 4 more than $10,000, and all four of those are ordinary token pairs (WETH/WXDAI, WETH/wstETH, SHU/WXDAI, sDAI/EURe), so no outcome-market pool holds more than $10,000. Pool values use the subgraph's own pricing, so read them as order of magnitude. The table shows what depth would be needed before any market could bind.</p>
+<p>Early on, futarchy is advisory. Pools of this size can bind only small decisions: a $500k pool binds up to about $2,400 a year of value. Most fee and budget decisions are bigger, so they use the market price as an input, and a slower path decides: a human review tier, a published reasoning note, and the 48-hour guardian veto. To bind a $3,200 yearly change (a 2-point fee move on $160k of annual volume) at a 10% margin, the pool needs about $650k per side; I have no plan to fund that by day 90. The loss figure is a floor on attack cost: the price is read as a time-weighted average over the window, so an attacker keeps paying slippage while arbitrage pulls the price back. The first 90-day job is to measure real depth and slippage on a live Seer pool and raise the cap only as far as that data supports. </p>
+<p>Measured depth is smaller than that table. DefiLlama lists the value locked in Seer markets (collateral, not pool depth) at about $329,000 on 6 November 2026, of which about $298,000 is on Gnosis (<a href="https://api.llama.fi/protocol/seer">api.llama.fi/protocol/seer</a>). A single $500,000 pool is therefore larger than all the collateral Seer holds today. At current depths the stake cap binds almost nothing, so the first markets run advisory only. Seer's Gnosis pool data (Swapr subgraph, 7 November 2026) agrees: of 3,296 pools, 393 hold more than $1 and the median of those holds about $10; 11 hold more than $1,000 and 4 more than $10,000, and all four of those are ordinary token pairs (WETH/WXDAI, WETH/wstETH, SHU/WXDAI, sDAI/EURe), so no outcome-market pool holds more than $10,000. Pool values use the subgraph's own pricing, so read them as order of magnitude. The table shows what depth would be needed before any market could bind.</p>
+<p>Two gaps in the cap. The buyback below means wash fees lift the token price directly, which can be cheaper than the capital-to-move-price figure, and the table ignores it. And <code>V</code> for a fee change is near zero until 90 days of volume exist, so until then every market is advisory, whatever its pool size.</p>
 <h3>Which Seer product this uses</h3>
 <p>The decision markets are Seer's shipped price-based futarchy: YES and NO pools for a Foreguild token, backed by retained fees. Fees reach the token price through a design choice of mine, not a Seer feature: each month the treasury spends half of the retained fees buying the token and locking it, so a change in retained fees moves the token's value. The stake-cap model above describes exactly those pools. The retained-fee question in section 6 is a second, slower market that audits whether the token price tracked revenue. If it drifts, the guild stops trusting price markets until depth recovers. Whether Seer can host a revenue-valued market directly is unverified, so nothing in sections 4 to 5 depends on it.</p>
 <h3>Humans</h3>
@@ -104,7 +105,7 @@ a{color:var(--acc)}
 
 <h2>6. The audit metric and its oracle question</h2>
 <p class="sub">This section applies only if Seer can host a numeric Reality.eth market for it. Otherwise the same event sum is published by the guild and anyone can recompute it.</p>
-<p><b>Metric:</b> retained fee revenue over a 30-day period, counting fees whose 14-day dispute window closed inside the period with no upheld dispute. A decision's effect is read about 45 days after it is adopted (30-day period plus the window), so one decision area can run about 8 proposals a year. A 90-day metric allows about 3 and 180-day about 2. (Counting arithmetic; the effect on decision quality is my judgment.)</p>
+<p><b>Metric:</b> retained fee revenue over a 30-day period, counting fees whose 14-day dispute window closed inside the period with no upheld dispute. A decision's effect is read about 45 days after it is adopted (30-day period plus the window) when no dispute is open; a dispute pushes that back by up to the Kleros times above. So one decision area can run about 8 proposals a year at best. A 90-day metric allows about 3 and 180-day about 2. (Counting arithmetic; the effect on decision quality is my judgment.)</p>
 <p>Exact question text posted to Reality.eth (numeric answer):</p>
 <pre>What is the sum, in USDC, of the "amount" fields of all FeeRetained
 events emitted by the Foreguild fee ledger contract [address] on Gnosis
@@ -113,24 +114,26 @@ FeeRetained is emitted by the contract only when a task's 14-day
 dispute window has closed, no DisputeOpen event is still unresolved
 at the window's close for that task, and no DisputeUpheld event exists
 for it. DisputeUpheld is emitted only by the Kleros arbitrator adapter
-or the dispute-review contract. The contract applies the per-cluster
-cap itself, using the cluster list whose hash is stored on-chain.
+or the dispute-review contract. The answer is the capped total the
+contract emits in its PeriodClosed event for that period (closePeriod
+applies the per-cluster cap to these events, using the cluster list
+whose hash is stored on-chain).
 Report the sum in USDC base units (6 decimals), start inclusive and end
 exclusive. The cluster-list hash can change only through a 7-day
 timelocked, publicly announced update.
 Answer 0 if there are none.</pre>
-<p>The oracle question is deliberately mechanical: the answer is a sum over contract events, so a bad-faith answerer has nothing to interpret. Settlement and verification fees emit the same event; bench fees are not in the metric. Verification fees also pay for review and Kleros costs, so the metric measures retained fees, not margin. Bond ladder (Fact: each answer needs at least twice the previous bond). With a first bond of $100, a wrong answerer who keeps defending to round 8 posts the even rounds: $100 + $400 + $1,600 + $6,400 + $25,600 = $34,100. Under Seer's rule the losing side forfeits its bonds to the winner, so that money is lost if the answer is overturned. Kleros arbitration can also be requested for a fixed fee at any time, which ends the ladder early, so $34,100 is the upper end and not the price of keeping a wrong answer standing.</p>
+<p>The oracle question is meant to be mechanical: the answer is a number the contract emits, so an answerer has little to interpret. What a challenger would contest is the cluster list and which events count. Settlement and verification fees emit the same event; bench fees are not in the metric. Verification fees also pay for review and Kleros costs, so the metric measures retained fees, not margin. Bond ladder (Fact: each answer needs at least twice the previous bond). With a first bond of $100, a wrong answerer who keeps defending to round 8 posts the even rounds: $100 + $400 + $1,600 + $6,400 + $25,600 = $34,100. Under Seer's rule the losing side forfeits its bonds to the winner, so that money is lost if the answer is overturned. Seer's docs also let a participant request Kleros arbitration by paying a fixed fee set by Kleros. I assume that can stop the ladder early (the docs do not say so), so $34,100 is the upper end, not the price of keeping a wrong answer standing.</p>
 <table>
 <tr><th>Round</th><th>0</th><th>2</th><th>4</th><th>6</th><th>8</th></tr>
 <tr><td>Bond to post</td><td>$100</td><td>$400</td><td>$1,600</td><td>$6,400</td><td>$25,600</td></tr>
 </table>
-<p>The first bond is a flat $100, since a market-bound decision is capped under about $2,500 anyway. Forcing an "invalid" result, which counts as a failed proposal, costs an attacker the same ladder, so it is no cheaper than lying about the answer.</p>
+<p>The first bond is a flat $100 if Seer lets the asker set it (not confirmed), since a market-bound decision is capped under about $2,500 anyway. Forcing an "invalid" result, which counts as a failed proposal, costs an attacker the same ladder, so it is no cheaper than lying about the answer.</p>
 
 <h2>7. Self-dealing</h2>
 <p>A trader holding the adopt side could push volume through the guild to lift the metric. The defences, and their limits:</p>
 <ul>
 <li>The metric is <b>retained fees</b>. To lift it by $X the attacker must pay $X in fees that stay retained. If the attacker also runs the worker side, they recover the worker payouts but not the fee. They may also recover part of the fee if they hold guild tokens that receive fee distributions, so the net cost is $X minus that share.</li>
-<li>A per-cluster cap: no funding cluster counts for more than 10% of the metric. In a synthetic test (Pareto buyer sizes, one attacker adding 30% of fees through one cluster, one random seed), the attacker paid $221 in fees and $74 counted, with 0.0% of honest fees dropped. <b>Limits:</b> the 0.0% figure holds only with an attacker present. With no attacker, the cap clips 70% of honest fees at 3 buyers, 28% at 10, 16% at 20, 8.5% at 50 and 4% at 200 (<code>model.py</code>, section 5). So the cap switches on only at 50 or more distinct buyers; below that it is off and futarchy stays advisory. An attacker who splits across 11 or more wallets that look unrelated passes the cap, so it only slows an attacker down. The real defence is the fee cost itself, plus a cluster list published on-chain with its hash so anyone can challenge it.</li>
+<li>A per-cluster cap: no funding cluster counts for more than 10% of the metric. In a synthetic test (Pareto buyer sizes, one attacker adding 30% of fees through one cluster, one random seed), the attacker paid $221 in fees and $74 counted. <b>Limits:</b> the cap is measured against total fees including the attacker's uncapped ones, so the $74 is about 12% of counted fees, not 10%, and the test's 0.0% honest-fee loss is an artifact of that definition, not a property of the cap. With no attacker, the cap clips 70% of honest fees at 3 buyers, 28% at 10, 16% at 20, 8.5% at 50 and 4% at 200 (<code>model.py</code>, section 5). So the cap switches on only at 50 or more distinct buyers; below that it is off and futarchy stays advisory. An attacker who splits fees across enough unrelated-looking wallets to keep each under the cap passes it, so it only slows an attacker down. The real defence is the fee cost itself, plus a cluster list published on-chain with its hash so anyone can challenge it.</li>
 </ul>
 
 <h2>8. Unit economics (no forecast)</h2>
