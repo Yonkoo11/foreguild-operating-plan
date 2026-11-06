@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Foreguild: Capped Futarchy Operating Plan</title>
+<style>
+:root{--bg:#fbfaf7;--fg:#1c1b19;--mute:#6a665e;--line:#dcd7cc;--acc:#0b5d4b;--warn:#8a3b12;--card:#f2efe7}
+@media (prefers-color-scheme:dark){:root{--bg:#171715;--fg:#ece9e1;--mute:#a09b90;--line:#3a3833;--acc:#5fc4a8;--warn:#e59a6a;--card:#22211e}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.6 Georgia,"Times New Roman",serif}
+main{max-width:760px;margin:0 auto;padding:32px 16px 80px}
+h1{font-size:2rem;line-height:1.2;margin:.2em 0}
+h2{font-size:1.3rem;margin:2.2em 0 .4em;border-top:1px solid var(--line);padding-top:1em}
+h3{font-size:1.05rem;margin:1.4em 0 .2em}
+p,li{margin:.5em 0}
+.sub{color:var(--mute)}
+table{border-collapse:collapse;width:100%;font:14px/1.45 system-ui,sans-serif;margin:1em 0;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--card)}
+code,pre{font:13px/1.45 ui-monospace,Menlo,monospace}
+pre{background:var(--card);padding:12px;overflow-x:auto;border:1px solid var(--line)}
+.box{background:var(--card);border-left:4px solid var(--acc);padding:10px 14px;margin:1em 0}
+.warn{border-left-color:var(--warn)}
+.tag{font:12px system-ui,sans-serif;padding:1px 6px;border:1px solid var(--line);border-radius:3px}
+a{color:var(--acc)}
+@media print{body{font-size:11pt}main{max-width:none}}
+</style>
+</head>
+<body>
+<main>
+
+<p class="sub">Seer FAO Operating Plan Contest · 6 Nov 2026</p>
+<h1>Foreguild: let the market steer only what the market can afford to be wrong about</h1>
+
+<div class="box">
+<p><b>The plan in six lines.</b></p>
+<ol>
+<li><b>Sell one kind of work:</b> software and data tasks that a script can accept or reject. The guild keeps a fee only when the script passes and the 14-day refund window closes.</li>
+<li><b>Do not live on small bounties.</b> The model below shows a $5 average ticket cannot break even at any take rate from 6% to 12%. The plan starts at $40+ tickets. (At 12% the $5 margin is exactly zero given my $0.60 cost assumption; 13% would just clear it.)</li>
+<li><b>Futarchy decides policy</b> (fees, bond sizes, routing, which verticals open) through Seer's conditional-token markets, inside the cap below.</li>
+<li><b>The new rule: every market has a stake cap.</b> A market may only bind a decision worth no more than what it would cost an attacker to manipulate that market. Bigger decisions use the market as a signal only, and a slower path decides.</li>
+<li><b>Primary design uses only what Seer ships:</b> price-based futarchy on a Foreguild token whose backing is retained fees. A slower retained-fee question on Reality.eth (section 6) is an audit layer. If Seer cannot host it, the plan still works without it.</li>
+<li><b>Every number here is labelled Fact or Assumption</b> (section 11). Run <code>model.py</code> to reproduce every table.</li>
+</ol>
+</div>
+
+<h2>1. What I looked at before writing this</h2>
+<p>I read Seer's own docs pages (futarchy, conditional markets, reporting, disputes) and poidh's docs, and read the other entries to this contest. Three things shaped the plan:</p>
+<ul>
+<li>Seer's shipped futarchy is <b>price-based</b>: YES and NO token pairs trade in two pools, and it is only on Gnosis Chain. An invalid market counts as a failed proposal. (<a href="https://docs.seer.pm/app/futarchy-markets.md">docs.seer.pm/app/futarchy-markets</a>)</li>
+<li>Reality.eth needs each new answer to post at least twice the previous bond. A Kleros dispute takes up to 14 days 12 hours, plus 11 days per appeal. (<a href="https://docs.seer.pm/app/report-answer.md">report-answer</a>, <a href="https://docs.seer.pm/app/raise-a-dispute.md">raise-a-dispute</a>)</li>
+<li>In the entries I could read, none gave a number for what it costs to move its own market. That gap is what the stake cap fills.</li>
+</ul>
+
+<h2>2. What the agents do</h2>
+<table>
+<tr><th>Agent</th><th>Job</th><th>Hard limit</th></tr>
+<tr><td>Intake</td><td>Turns a posted task into an acceptance test and a price</td><td>Rejects tasks with no machine-checkable test</td></tr>
+<tr><td>Router</td><td>Matches the task to worker agents by past pass rate</td><td>Follows the routing policy futarchy adopted</td></tr>
+<tr><td>Workers</td><td>Do the task; post a bond returned on pass</td><td>Bond slashed on proven failure</td></tr>
+<tr><td>Verifier</td><td>Runs the acceptance test in a sandbox</td><td>Cannot see the worker's identity</td></tr>
+<tr><td>Treasurer</td><td>Pays workers, refunds failures, spends inside budget envelopes</td><td>Per-order and per-day caps; pausable</td></tr>
+<tr><td>Scout</td><td>Finds public bounties (poidh, GitHub) and posts matching tasks</td><td>Only tasks that pass the same acceptance test</td></tr>
+</table>
+
+<h2>3. Where tasks come from</h2>
+<p><b>Lane A: direct buyers (starts day 1).</b> Developers and small teams with chores a script can check: failing CI, dependency bumps, data cleanup against a schema. Target ticket $40 to $100.</p>
+<p><b>Lane B: mirrored public bounties.</b> The Scout agent solves public bounties and collects the payout. poidh is one source: its docs set a 0.001 ETH minimum bounty (about $2.22 at the price shown on this contest's page) and a 2.5% protocol fee. Lane B gives early test volume, but the tickets are too small to carry the business (section 8), so it is a proving ground, not the plan.</p>
+<div class="box warn"><p><b>What I could not verify.</b> I found no sourced figure for how many buyers pay for machine-checkable agent work today. Lane A demand is an assumption. The 90-day plan (section 10) makes it the first thing to test, with a kill rule.</p></div>
+
+<h2>4. How work is assessed and paid</h2>
+<ol>
+<li>The buyer funds escrow. Every task has an acceptance test written at intake.</li>
+<li>The Verifier runs the test. Pass starts a 14-day dispute window; fail refunds the buyer and slashes the bond if the failure is proven.</li>
+<li>After the window closes with no upheld dispute, the worker is paid and the guild keeps its fee. Only that retained fee counts as revenue.</li>
+</ol>
+<p>Disputes go to a human reviewer tier first, then to a Kleros case as the last step. Humans are paid per case.</p>
+
+<h2>5. How futarchy governs (and where it must not)</h2>
+<h3>What futarchy decides</h3>
+<p>Fee band, bond sizes, routing rules, which task families open, and any spend above a budget envelope. Day-to-day agent decisions stay under the adopted policy file.</p>
+<h3>How a decision runs</h3>
+<ol>
+<li>The stake <code>V</code> (12-month value) is computed by a published formula, not entered by the proposer: for a fee change, trailing 90-day volume × 4 × the fee change, summed over all changes to that parameter in the last 90 days so a big change cannot be sliced under the cap. For a budget, the amount. For routing and opening a new task family, <code>V</code> cannot be bounded, so those are advisory only. A wrong <code>V</code> is challengeable with a Reality.eth question: "Is the published V for proposal [id] within 20% of the formula applied to ledger data at [block]?"</li>
+<li>Two conditional pools open, as Seer's futarchy markets do. Foreguild policy (not a Seer feature): adopt only if the adopt-side price beats the reject-side price by a pass margin, as a time-weighted average over the window.</li>
+<li>The adopted policy is loaded by the agents automatically.</li>
+</ol>
+<h3>The stake cap (the new rule)</h3>
+<p>Before opening, the guild reads the pool depth <code>D</code> and estimates what it costs an attacker to push the price by the pass margin. A market may <b>bind</b> a proposal only if <code>V ≤ attacker loss</code>: an attack that wins the decision must cost more than the decision is worth. I assume the attacker's gain is at most <code>V</code>.</p>
+<p><code>model.py</code> output, under these assumptions: a constant-product pool with depth <code>D</code> per side, capital to move price <code>D(√(1+m)−1)</code>, and attacker loss taken as margin × capital. That loss figure is a simplification, not derived from Seer's pools; replace it with measured slippage before relying on it.</p>
+<table>
+<tr><th>Pool depth per side</th><th>Pass margin</th><th>Capital to move price</th><th>Attacker loss (assumed)</th><th>Max value the market may bind</th></tr>
+<tr><td>$20,000</td><td>10%</td><td>$976</td><td>$98</td><td>$98</td></tr>
+<tr><td>$100,000</td><td>10%</td><td>$4,881</td><td>$488</td><td>$488</td></tr>
+<tr><td>$500,000</td><td>10%</td><td>$24,404</td><td>$2,440</td><td>$2,440</td></tr>
+</table>
+<p>Early on, futarchy is advisory. Pools of this size can bind only small decisions: a $500k pool binds up to about $2,400 a year of value. Most fee and budget decisions are bigger, so they use the market price as an input, and a slower path decides: a human review tier, a published reasoning note, and the 48-hour guardian veto. To bind a $3,200 yearly change (a 2-point fee move on $160k of annual volume) at a 10% margin, the pool needs about $650k per side; I have no plan to fund that by day 90. The loss figure is a floor on attack cost: the price is read as a time-weighted average over the window, so an attacker keeps paying slippage while arbitrage pulls the price back. The first 90-day job is to measure real depth and slippage on a live Seer pool and raise the cap only as far as that data supports. The market's authority starts small and grows with measured depth.</p>
+<h3>Which Seer product this uses</h3>
+<p>The decision markets are Seer's shipped price-based futarchy: YES and NO pools for a Foreguild token, backed by retained fees. Fees reach the token price through a design choice of mine, not a Seer feature: each month the treasury spends half of the retained fees buying the token and locking it, so a change in retained fees moves the token's value. The stake-cap model above describes exactly those pools. The retained-fee question in section 6 is a second, slower market that audits whether the token price tracked revenue. If it drifts, the guild stops trusting price markets until depth recovers. Whether Seer can host a revenue-valued market directly is unverified, so nothing in sections 4 to 5 depends on it.</p>
+<h3>Humans</h3>
+<p>A guardian multisig can pause payouts and veto a proposal within 48 hours. It cannot move treasury funds or write policy. Humans arbitrate last-tier disputes.</p>
+
+<h2>6. The audit metric and its oracle question</h2>
+<p class="sub">This section applies only if Seer can host a numeric Reality.eth market for it. Otherwise the same event sum is published by the guild and anyone can recompute it.</p>
+<p><b>Metric:</b> retained fee revenue over a 30-day period, counting fees whose 14-day dispute window closed inside the period with no upheld dispute. A decision's effect is read about 45 days after it is adopted (30-day period plus the window), so one decision area can run about 8 proposals a year. A 90-day metric allows about 3 and 180-day about 2. (Counting arithmetic; the effect on decision quality is my judgment.)</p>
+<p>Exact question text posted to Reality.eth (numeric answer):</p>
+<pre>What is the sum, in USDC, of the "amount" fields of all FeeRetained
+events emitted by the Foreguild fee ledger contract [address] on Gnosis
+Chain with a block timestamp between [start UTC] and [end UTC]?
+FeeRetained is emitted by the contract only when a task's 14-day
+dispute window has closed, no DisputeOpen event is still unresolved
+at the window's close for that task, and no DisputeUpheld event exists
+for it. DisputeUpheld is emitted only by the Kleros arbitrator adapter
+or the dispute-review contract. The contract applies the per-cluster
+cap itself, using the cluster list whose hash is stored on-chain.
+Report the sum in USDC base units (6 decimals), start inclusive and end
+exclusive. The cluster-list hash can change only through a 7-day
+timelocked, publicly announced update.
+Answer 0 if there are none.</pre>
+<p>The oracle question is deliberately mechanical: the answer is a sum over contract events, so a bad-faith answerer has nothing to interpret. Settlement and verification fees emit the same event; bench fees are not in the metric. Verification fees also pay for review and Kleros costs, so the metric measures retained fees, not margin. Bond ladder (Fact: each answer needs at least twice the previous bond). With a first bond of $100, a wrong answerer who keeps defending to round 8 posts the even rounds: $100 + $400 + $1,600 + $6,400 + $25,600 = $34,100. Under Seer's rule the losing side forfeits its bonds to the winner, so that money is lost if the answer is overturned. Kleros arbitration can also be requested for a fixed fee at any time, which ends the ladder early, so $34,100 is the upper end and not the price of keeping a wrong answer standing.</p>
+<table>
+<tr><th>Round</th><th>0</th><th>2</th><th>4</th><th>6</th><th>8</th></tr>
+<tr><td>Bond to post</td><td>$100</td><td>$400</td><td>$1,600</td><td>$6,400</td><td>$25,600</td></tr>
+</table>
+<p>The first bond is a flat $100, since a market-bound decision is capped under about $2,500 anyway. Forcing an "invalid" result, which counts as a failed proposal, costs an attacker the same ladder, so it is no cheaper than lying about the answer.</p>
+
+<h2>7. Self-dealing</h2>
+<p>A trader holding the adopt side could push volume through the guild to lift the metric. The defences, and their limits:</p>
+<ul>
+<li>The metric is <b>retained fees</b>. To lift it by $X the attacker must pay $X in fees that stay retained. If the attacker also runs the worker side, they recover the worker payouts but not the fee. They may also recover part of the fee if they hold guild tokens that receive fee distributions, so the net cost is $X minus that share.</li>
+<li>A per-cluster cap: no funding cluster counts for more than 10% of the metric. In a synthetic test (Pareto buyer sizes, one attacker adding 30% of fees through one cluster, one random seed), the attacker paid $221 in fees and $74 counted, with 0.0% of honest fees dropped. <b>Limits:</b> the 0.0% figure holds only with an attacker present. With no attacker, the cap clips 70% of honest fees at 3 buyers, 28% at 10, 16% at 20, 8.5% at 50 and 4% at 200 (<code>model.py</code>, section 5). So the cap switches on only at 50 or more distinct buyers; below that it is off and futarchy stays advisory. An attacker who splits across 11 or more wallets that look unrelated passes the cap, so it only slows an attacker down. The real defence is the fee cost itself, plus a cluster list published on-chain with its hash so anyone can challenge it.</li>
+</ul>
+
+<h2>8. Unit economics (no forecast)</h2>
+<p>Forecasts for a market that does not exist yet are guesses. The useful number is break-even. Settled tasks per month needed to cover $6,000 of monthly fixed cost, with $0.60 variable cost per task (verification plus a dispute reserve). Both are assumptions; human review cases and Kleros fees are paid from the verification-tier fee, not from this $0.60.</p>
+<table>
+<tr><th>Average ticket</th><th>6% take</th><th>8%</th><th>10%</th><th>12%</th></tr>
+<tr><td>$5</td><td>never</td><td>never</td><td>never</td><td>never</td></tr>
+<tr><td>$15</td><td>20,000</td><td>10,000</td><td>6,667</td><td>5,000</td></tr>
+<tr><td>$40</td><td>3,333</td><td>2,308</td><td>1,765</td><td>1,429</td></tr>
+<tr><td>$100</td><td>1,111</td><td>811</td><td>638</td><td>526</td></tr>
+</table>
+<p>At $40 and 10%, the guild breaks even near 1,765 settled tasks a month. At $5 it never does. So the plan starts with $40 to $100 maintenance work and uses poidh-sized bounties only to test the verifier.</p>
+
+<p><b>The revenue goal.</b> The number the guild optimises is settled-task fees crossing break-even: about $7,060 a month (1,765 tasks at $40 and 10%) on my assumptions. Day 90 is a gate, not the goal; the goal is crossing that line by month 9, with futarchy tuning fee, bond and routing policy toward it.</p>
+
+<h2>9. Revenue streams</h2>
+<table>
+<tr><th>Stream</th><th>How it earns</th><th>Counts in the metric?</th></tr>
+<tr><td>Settlement fee</td><td>8% to 12% of escrow, kept after the refund window</td><td>Yes</td></tr>
+<tr><td>Verification tier</td><td>Buyer pays extra for a second reviewer or human spot check</td><td>Yes</td></tr>
+<tr><td>Bench fee</td><td>Worker operators pay for a verified profile</td><td>Yes, if not refunded</td></tr>
+</table>
+<p>Fee levels are an adopted-policy variable: futarchy moves them inside the 6% to 14% band. I chose that band; it is not sourced.</p>
+
+<h2>10. First 90 days and kill rules</h2>
+<table>
+<tr><th>Days</th><th>Do</th><th>Pass</th><th>Kill or change if</th></tr>
+<tr><td>1-14</td><td>Ship the verifier and escrow on a testnet; post 20 of our own tasks</td><td>Verifier agrees with a human reviewer on 18 of 20</td><td>Below 15 of 20: fix the verifier first</td></tr>
+<tr><td>15-45</td><td>Open Lane A to 10 named buyers with $40+ tasks</td><td>At least 3 pay with real money</td><td>0 pay: the premise failed; rewrite the offer</td></tr>
+<tr><td>46-90</td><td>Open the first futarchy decision (fee band) under the stake cap</td><td>Pool depth supports the proposal's stake; the market resolves. Run-rate reaches 25% of the break-even task count for the chosen ticket size</td><td>Depth too thin: escalate to the slow path, do not widen the cap. Run-rate under 10% of break-even: change ticket size or stop</td></tr>
+</table>
+
+<h2>11. Facts and assumptions</h2>
+<table>
+<tr><th>Item</th><th>Status</th><th>Source or how to check</th></tr>
+<tr><td>Seer futarchy is price-based, Gnosis only, invalid = failed</td><td class="tag">Fact</td><td>docs.seer.pm/app/futarchy-markets (fetched 6 Nov 2026)</td></tr>
+<tr><td>Reality.eth answers need at least 2x the previous bond</td><td class="tag">Fact</td><td>docs.seer.pm/app/report-answer</td></tr>
+<tr><td>Kleros dispute up to 14d 12h, +11d per appeal</td><td class="tag">Fact</td><td>docs.seer.pm/app/raise-a-dispute</td></tr>
+<tr><td>poidh: 0.001 ETH minimum, 2.5% fee, contract on Base</td><td class="tag">Fact</td><td>poidh docs; contract 0x5555Fa783936C260f77385b4E153B9725feF1719 on Base returns MIN_BOUNTY_AMOUNT() = 1e15 wei (0.001 ETH), read 6 Nov 2026. The 2.5% fee comes from the docs only</td></tr>
+<tr><td>0.5 ETH = $1,109.97 on the bounty page</td><td class="tag">Fact</td><td>poidh.xyz/base/bounty/1531, 6 Nov 2026 (the price moves)</td></tr>
+<tr><td>Seer supports revenue-valued conditional markets</td><td class="tag">Unverified</td><td>Not shown in the docs I read; only the audit layer depends on it</td></tr>
+<tr><td>Pool model, loss = margin × capital, safety factor 1, pass margin, TWAP, bond sizes</td><td class="tag">Assumption</td><td>model.py; replace with measured pool data</td></tr>
+<tr><td>Monthly fixed cost $6,000; $0.60 variable per task; ticket sizes</td><td class="tag">Assumption</td><td>Test in days 15-45</td></tr>
+<tr><td>Anyone will pay for machine-checkable agent work at $40+</td><td class="tag">Assumption</td><td>The day 15-45 test; kill rule above</td></tr>
+</table>
+
+<h2>12. Verify it yourself</h2>
+<pre>python3 -I model.py</pre>
+<p>Files: <a href="model.py">model.py</a>, <a href="model-output.txt">model-output.txt</a>.</p>
+<p>It prints the break-even table, the bond ladder, the stake-cap table and the concentration-cap test. Every table above is copied from its output.</p>
+
+</main>
+</body>
+</html>

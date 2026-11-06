@@ -1,0 +1,38 @@
+F ETH/USD from poidh page: 2,220; min poidh bounty $2.22
+
+Break-even settled tasks per month (fixed $6000):
+ticket\take  6%    8%    10%   12%   (A: variable cost/task $0.60 = verify+dispute reserve)
+$5            inf     inf     inf     inf
+$15        20,000  10,000   6,667   5,000
+$40         3,333   2,308   1,765   1,429
+$100        1,111     811     638     526
+
+Oracle: cost to keep a WRONG answer standing, bonds double each round
+round 0: must post $100  cumulative $100
+round 1: must post $200  cumulative $300
+round 2: must post $400  cumulative $700
+round 3: must post $800  cumulative $1,500
+round 4: must post $1,600  cumulative $3,100
+round 5: must post $3,200  cumulative $6,300
+round 6: must post $6,400  cumulative $12,700
+round 7: must post $12,800  cumulative $25,500
+round 8: must post $25,600  cumulative $51,100
+
+Stake cap: value one market may govern V <= attack_loss / S (A: S=1, attacker gain <= V)
+depth    margin  capital   loss   max_governed_value
+$ 20,000  5%   $    494  $    25  $       25
+$ 20,000  10%   $    976  $    98  $       98
+$100,000  5%   $  2,470  $   123  $      123
+$100,000  10%   $  4,881  $   488  $      488
+$500,000  5%   $ 12,348  $   617  $      617
+$500,000  10%   $ 24,404  $ 2,440  $    2,440
+
+Concentration cap test (A: synthetic Pareto honest buyers, attacker adds 30% of fees via one cluster):
+attacker fees paid $221 (real cost), counted $74; honest fees dropped by the cap: 0.0%
+
+Honest fees clipped by the 10% cap with no attacker, by number of buyers:
+   3 buyers: 70.5% of honest fees dropped
+  10 buyers: 28.2% of honest fees dropped
+  20 buyers: 16.4% of honest fees dropped
+  50 buyers: 8.5% of honest fees dropped
+ 200 buyers: 4.0% of honest fees dropped
