@@ -30,7 +30,7 @@ a{color:var(--acc)}
 <body>
 <main>
 
-<p class="sub">Seer FAO Operating Plan Contest · Non-internal submission (I have no affiliation with Seer) · updated 14 Nov 2026 · <a href="foreguild-plan.pdf">PDF</a></p>
+<p class="sub">Seer FAO Operating Plan Contest · Non-internal submission (I have no affiliation with Seer) · updated 16 Nov 2026 · <a href="foreguild-plan.pdf">PDF</a></p>
 <h1>Foreguild: earn fees first, let markets bind as depth grows</h1>
 
 <div class="box">
@@ -50,13 +50,12 @@ a{color:var(--acc)}
 <p>Every table comes from one of three scripts in the repo (section 12). Each number is labelled Fact or Assumption (section 11).</p>
 </div>
 
-<h2>1. What I looked at before writing this</h2>
-<p>I read Seer's own docs pages (futarchy, conditional markets, reporting, disputes), read the poidh contracts on Base, measured Seer's live pools on Gnosis, and read the public entries to this contest. Four things shaped the plan:</p>
+<h2>1. What the plan builds on</h2>
+<p>Three things shape the plan:</p>
 <ul>
 <li>Seer's shipped futarchy is <b>price-based</b>: YES and NO token pairs trade in two pools, and it is only on Gnosis Chain. An invalid market counts as a failed proposal. (<a href="https://docs.seer.pm/app/futarchy-markets.md">docs.seer.pm/app/futarchy-markets</a>)</li>
 <li>Reality.eth needs each new answer to post at least twice the previous bond. A Kleros dispute takes up to 14 days 12 hours, plus 11 days per appeal. (<a href="https://docs.seer.pm/app/report-answer.md">report-answer</a>, <a href="https://docs.seer.pm/app/raise-a-dispute.md">raise-a-dispute</a>)</li>
 <li>The <a href="https://ksan.notion.site/faos">Futarchy Autonomous Optimizers design page</a> describes a FAO that optimises a TOKEN/CURRENCY price and is set up with a minimum liquidity, a TWAP window and a random failure chance. I could not confirm who wrote it or whether Seer endorses it, so I treat it as a reference design. This plan maps onto it like this: the Foreguild token priced in sDAI is the TOKEN/CURRENCY pair; the time-weighted price is its TWAP window; the stake cap is its minimum liquidity, set per proposal from the value at stake instead of one fixed number. I do not use random failure in any number here.</li>
-<li>Two other entries put a number on manipulation cost: claim 4242 reports about $13 to move a Seer price by 2 cents, and claim 4195 gives an attacker equation. My own run on 14 Nov finds a median of 1.43 sDAI and a 90th percentile of 17 across 575 outcome pools (section 5). This plan measures the futarchy pools separately and turns the number into a rule for how much a market may decide (section 5).</li>
 </ul>
 
 <h2>2. What the agents do</h2>
@@ -80,7 +79,7 @@ a{color:var(--acc)}
 <tr><td>Median paid bounty</td><td>$4.76</td><td></td></tr>
 <tr><td>Paid out at $40 or more</td><td>82, worth $8,565</td><td>9 from 7 issuers, worth $576</td></tr>
 </table>
-<p>At a 10% fee, every $40+ bounty poidh paid in the last 90 days would have earned the guild about $58. Break-even needs $7,060 a month. So Lane B is a proving ground for the verifier and nothing more.</p>
+<p>At a 10% fee, every $40+ bounty poidh paid in the last 90 days would have earned the guild about $58. Break-even needs $7,060 a month. So Lane B only tests the verifier.</p>
 <div class="box warn"><p><b>What I could not verify.</b> I found no counted figure for how many buyers pay for machine-checkable agent work at $40 or more. A one-off GitHub search on 14 Nov for open issues carrying the gem-emoji "Bounty" label returned issues with dollar labels, most of them above $40, but labels do not record who got paid, so it shows asking prices and not paid demand. Lane A demand stays an assumption. The 90-day plan (section 10) makes it the first thing to test, with a kill rule.</p></div>
 
 <h2>4. How work is assessed and paid</h2>
@@ -100,7 +99,7 @@ a{color:var(--acc)}
 <li>Two conditional pools open, as Seer's futarchy markets do. Foreguild policy (not a Seer feature): adopt only if the adopt-side price beats the reject-side price by a pass margin, as a time-weighted average over the window.</li>
 <li>The adopted policy is loaded by the agents automatically.</li>
 </ol>
-<h3>The stake cap (the new rule)</h3>
+<h3>The stake cap</h3>
 <p>Before opening, the guild reads the pool depth <code>D</code> and estimates what it costs an attacker to push the price by the pass margin. A market may <b>bind</b> a proposal only if <code>V ≤ attacker loss</code>: an attack that wins the decision must cost more than the decision is worth. I assume the attacker's gain is at most <code>V</code>.</p>
 <p><b>Measured on Seer's live pools.</b> <code>measure.py</code> reads Seer's market index and the pool contracts on Gnosis and works out, pool by pool, what it costs to move the price and what the pusher loses if the price fully returns. Run on 14 Nov 2026: Seer lists 442 futarchy proposals on Gnosis; 281 of their YES/NO pools exist on chain and 251 have liquidity at the current price. The three deepest:</p>
 <table>
@@ -118,7 +117,7 @@ a{color:var(--acc)}
 <tr><td>$100,000</td><td>10%</td><td>$4,881</td><td>$227</td><td>$227</td></tr>
 <tr><td>$500,000</td><td>10%</td><td>$24,404</td><td>$1,136</td><td>$1,136</td></tr>
 </table>
-<p>To bind a $3,200 yearly change (a 2-point fee move on $160k of annual volume) the pool needs about $1.41 million per side. DefiLlama lists all value locked in Seer at about $310,800 on 14 November 2026, $280,300 of it on Gnosis (<a href="https://api.llama.fi/protocol/seer">api.llama.fi/protocol/seer</a>). So a fee decision of that size will not be market-bound for a long time, and this plan does not pretend otherwise. The loss figure is a floor: the price is read as a time-weighted average, so an attacker keeps paying while arbitrage pulls the price back.</p>
+<p>To bind a $3,200 yearly change (a 2-point fee move on $160k of annual volume) the pool needs about $1.41 million per side. DefiLlama lists all value locked in Seer at about $310,800 on 14 November 2026, $280,300 of it on Gnosis (<a href="https://api.llama.fi/protocol/seer">api.llama.fi/protocol/seer</a>). So a fee decision of that size will not be market-bound for a long time. The loss figure is a floor: the price is read as a time-weighted average, so an attacker keeps paying while arbitrage pulls the price back.</p>
 <h3>The ladder from advice to binding</h3>
 <p>Depth is paid for by revenue. Each month, half of the surplus (retained fees minus costs) goes into a liquidity reserve: half of it buys the Foreguild token, half stays in sDAI, and the pair is placed in the proposal pools. Liquidity is lent to a market and comes back when it resolves, so the same reserve serves one proposal after another. A market may bind a decision worth <code>V</code> once depth per side is at least 440 × <code>V</code> (10% margin). <code>model.py</code>, at a $40 ticket and 10% fee:</p>
 <table>
@@ -127,7 +126,7 @@ a{color:var(--acc)}
 <tr><td>3,530</td><td>$6,002</td><td>$18,006</td><td>$41</td></tr>
 <tr><td>7,060</td><td>$18,004</td><td>$54,012</td><td>$123</td></tr>
 </table>
-<p>That is a slow ladder, and I think it is the true one for any FAO on today's pools. In year one the markets earn their keep as a priced forecast of retained fees that the review tier has to answer in writing when it disagrees. Binding starts with small, bounded items such as a single budget line, and widens only as fast as fees fund depth. Outside liquidity would speed it up; the rule does not change, only <code>D</code>.</p>
+<p>That is a slow ladder. I think any FAO on today's pools faces the same one. In year one the markets earn their keep as a priced forecast of retained fees that the review tier has to answer in writing when it disagrees. Binding starts with small, bounded items such as a single budget line, and widens only as fast as fees fund depth. Outside liquidity would speed it up; the rule does not change, only <code>D</code>.</p>
 <p>Two gaps in the cap. The reserve buys the token, so wash fees lift the token price directly, which can be cheaper than the capital-to-move-price figure, and the tables ignore it. And <code>V</code> for a fee change is near zero until 90 days of volume exist, so until then every market is advisory, whatever its pool size.</p>
 <h3>Which Seer product this uses</h3>
 <p>The decision markets are Seer's shipped price-based futarchy: YES and NO pools for a Foreguild token, backed by retained fees. Fees reach the token price through a design choice of mine, not a Seer feature: the liquidity reserve above buys the token each month out of surplus, so a change in retained fees moves the token's value. The stake-cap model above describes exactly those pools. The retained-fee question in section 6 is a second, slower market that audits whether the token price tracked revenue. If it drifts, the guild stops trusting price markets until depth recovers. Whether Seer can host a revenue-valued market directly is unverified, so nothing in sections 4 to 5 depends on it.</p>
@@ -199,7 +198,7 @@ Answer 0 if there are none.</pre>
 <h2>11. Facts and assumptions</h2>
 <table>
 <tr><th>Item</th><th>Status</th><th>Source or how to check</th></tr>
-<tr><td>Seer futarchy is price-based, Gnosis only, invalid = failed</td><td class="tag">Fact</td><td>docs.seer.pm/app/futarchy-markets (fetched 6 Nov 2026)</td></tr>
+<tr><td>Seer futarchy is price-based, Gnosis only, invalid = failed</td><td class="tag">Fact</td><td>docs.seer.pm/app/futarchy-markets</td></tr>
 <tr><td>Reality.eth answers need at least 2x the previous bond</td><td class="tag">Fact</td><td>docs.seer.pm/app/report-answer</td></tr>
 <tr><td>Kleros dispute up to 14d 12h, +11d per appeal</td><td class="tag">Fact</td><td>docs.seer.pm/app/raise-a-dispute</td></tr>
 <tr><td>poidh: 0.001 ETH minimum, 2.5% fee, contract on Base</td><td class="tag">Fact</td><td>Contract 0x5555Fa783936C260f77385b4E153B9725feF1719 on Base returns MIN_BOUNTY_AMOUNT() = 1e15 wei and FEE_BPS() = 250, read 13 Nov 2026</td></tr>
@@ -222,11 +221,11 @@ python3 -I census.py     # every poidh bounty on Base: counts, sizes, payout sha
 <p>Every table above is copied from one of those outputs. <code>model.py</code> prints the same numbers every run. The other two read live chains, so their numbers move; the saved outputs are the 14 Nov 2026 runs. The census takes several minutes.</p>
 
 <h2>13. What changed since the submitted version</h2>
-<p>The version submitted to the contest is commit 76c0420 (7 Nov 2026). This page was updated on 14 Nov 2026:</p>
+<p>The version submitted to the contest is commit 76c0420 (7 Nov 2026). This page was last updated on 16 Nov 2026; the measurements are the 14 Nov runs:</p>
 <ul>
 <li>The stake-cap table is now measured on Seer's pools; the modelled one stays as a comparison. The modelled attacker loss was about twice too high (margin × capital) and is corrected, which moves the depth needed to bind $3,200 from about $650k to about $1.41 million per side.</li>
 <li>Added the poidh census, the ladder from advice to binding, and the FAO design mapping.</li>
-<li>Corrected: other entries do state a manipulation cost; Seer's docs do say an arbitration request stops new answers; bench fees are not in the metric; poidh's fee is read from the contract.</li>
+<li>Removed a comparison with other entries. Corrected: Seer's docs do say an arbitration request stops new answers; bench fees are not in the metric; poidh's fee is read from the contract.</li>
 <li>Refreshed dated numbers (ETH price, value locked in Seer).</li>
 </ul>
 

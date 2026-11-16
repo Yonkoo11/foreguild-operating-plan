@@ -3,8 +3,8 @@
 Entry for the Seer FAO Operating Plan Contest. Read it at
 https://yonkoo11.github.io/foreguild-operating-plan/ or as `foreguild-plan.pdf`.
 
-The version submitted to the contest is commit `76c0420` (7 Nov 2026). The page was updated on
-14 Nov 2026; section 13 of the plan lists what changed.
+The version submitted to the contest is commit `76c0420` (7 Nov 2026). The page was last updated on
+16 Nov 2026; section 13 of the plan lists what changed.
 
 ```
 .
@@ -24,7 +24,7 @@ The version submitted to the contest is commit `76c0420` (7 Nov 2026). The page 
 python3 -I model.py | diff - model-output.txt && echo match
 ```
 
-Expected output (produced by a run made before this README was written):
+Expected output:
 
 ```
 match
