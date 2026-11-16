@@ -1,10 +1,10 @@
 """Foreguild plan model. Every input marked A= is an ASSUMPTION; F= a verified fact.
 Run: python3 -I model.py"""
 import math
-# F: poidh page shows 0.5 ETH = $1109.97 -> ETH/USD
-ETH=1109.97/0.5
+# F: ETH/USD read by census.py from coins.llama.fi on 14 Nov 2026
+ETH=1903.44
 MIN_BOUNTY_USD=0.001*ETH            # F: poidh min bounty 0.001 ETH
-print(f"F ETH/USD from poidh page: {ETH:,.0f}; min poidh bounty ${MIN_BOUNTY_USD:.2f}")
+print(f"F ETH/USD (coins.llama.fi, 14 Nov 2026): {ETH:,.0f}; min poidh bounty ${MIN_BOUNTY_USD:.2f}; 0.5 ETH ${ETH/2:,.2f}")
 
 # 1. Break-even tasks/month = fixed / (ticket*take - variable cost per task)
 def be(F,T,r,c):
@@ -27,13 +27,23 @@ for k in range(0,9):
 
 # 3. Attack model (A: constant-product pool, depth D per side)
 def attack(D,m):
-    cap=D*(math.sqrt(1+m)-1); return cap, cap*m   # A: attacker loses about margin x capital pushed (assumption, not derived)
+    cap=D*(math.sqrt(1+m)-1); return cap, cap*(1-1/math.sqrt(1+m))   # derived: tokens bought are worth cap/sqrt(1+m) once the price fully reverts; measure.py finds the same ratio in live pools
 print("\nStake cap: value one market may govern V <= attack_loss / S (A: S=1, attacker gain <= V)")
 S=1
 print("depth    margin  capital   loss   max_governed_value")
 for D in (20_000,100_000,500_000):
     for m in (0.05,0.10):
         c,l=attack(D,m); print(f"${D:>7,}  {m:.0%}   ${c:>7,.0f}  ${l:>6,.0f}  ${l/S:>9,.0f}")
+# depth per side needed so that a 10% push loses $3,200 (one month-9 fee line, see page)
+need=3200/((math.sqrt(1.1)-1)*(1-1/math.sqrt(1.1)))
+print(f"depth per side for a $3,200 loss at a 10% margin: ${need:,.0f}")
+# depth ladder (A: $40 ticket, 10% take; half of each month's surplus goes to pool liquidity, half of it as tokens, half as sDAI)
+k=(math.sqrt(1.1)-1)*(1-1/math.sqrt(1.1))
+print(f"\nDepth ladder: a market may bind V only when depth per side >= {1/k:,.0f} x V (10% margin)")
+print("tasks/month  monthly surplus  depth per side after 12 months  largest decision it may bind")
+for n in (1765,3530,7060):
+    sur=max(0,n*(40*.10-0.60)-F_); d=sur*0.5*12/2
+    print(f"{n:>11,}  ${sur:>14,.0f}  ${d:>29,.0f}  ${d*k:>27,.0f}")
 
 # 4. Self-dealing: metric = fees RETAINED after the 14-day refund window. A wash trader pays the fee for real,
 #    so inflating the metric by $X costs >= $X. Defence added: no single funding cluster may supply >10% of the metric.

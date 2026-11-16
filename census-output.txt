@@ -1,0 +1,19 @@
+poidh bounties on Base, read 2026-11-14 06:17 UTC. ETH = $1903.44 (coins.llama.fi)
+0.5 ETH = $951.72; poidh minimum bounty 0.001 ETH = $1.90
+
+older contract: 990 bounties; paid out 532 (54%), cancelled 257, open 201
+  size of all bounties: median $2.86; under $5: 67%; $40 or more: 6%
+  paid-out bounties: median $4.19, total $7,920; of $40 or more: 41, worth $5,016
+
+(current contract: 0 settled bounties whose creation event was not found, counted as $0)
+
+current contract: 563 bounties; paid out 329 (58%), cancelled 138, open 96
+  size of all bounties: median $5.71; under $5: 48%; $40 or more: 10%
+  paid-out bounties: median $5.71, total $5,978; of $40 or more: 41, worth $3,549
+
+Both contracts: 1553 bounties; paid out 861 (55%), cancelled 395, open 297
+  size of all bounties: median $3.81; under $5: 60%; $40 or more: 7%
+  paid-out bounties: median $4.76, total $13,898; of $40 or more: 82, worth $8,565
+
+Last 90 days, both contracts: 228 bounties posted, 135 paid out worth $1,516
+  paid out at $40 or more: 9 bounties from 7 distinct issuers, worth $576 (about 3 a month)

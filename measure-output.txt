@@ -1,0 +1,31 @@
+Seer pools on Gnosis, read 2026-11-14 06:26 UTC
+Seer markets on Gnosis: 2712 (outcome tokens by market type: {'Generic': 8373, 'Futarchy': 1238})
+Swapr v3 pools in Seer's index with live liquidity: 856; outcome/sDAI: 589; other pairs: 267
+Pool swap fee across these pools: 0.01% to 1.50% (not included in costs)
+
+Outcome-token / sDAI pools with live liquidity: 589
+sDAI sitting in the pool: median 0.01, 90th pct 75, largest 1415; pools holding over 1,000 sDAI: 2
+sDAI to lift the outcome price by N cents (cost) and what is lost if it fully reverts (loss):
+move   pools   median cost   90th pct cost   largest cost   median loss   largest loss
+ 2c     575          1.43              17            347          0.10             29
+ 5c     575          2.30              35            860          0.41             57
+10c     575          3.98              58           1697          0.75            142
+
+Futarchy proposals on Gnosis: 442 (389 unresolved). Yes/no pools that exist on chain: 281; with liquidity at the current price: 251
+Currency-side tokens to move the pool price by the pass margin, liquidity held as deep as it is now.
+The 12 deepest pools (the other 239 are shallower):
+side  state     paid in  cost +5%    loss   cost +10%    loss   proposal
+no    resolved  sDAI     1248.99   30.10    2468.58  114.88   Will GIP-151 (one-time pro-rata treasury redemption) be pass
+no    resolved  sDAI      747.53   18.02    1477.46   68.76   Will KIP-90 (Cooperative Spending Disclosure) be approved by
+yes   resolved  sDAI      654.51   15.77    1293.61   60.20   Will KIP-90 (Cooperative Spending Disclosure) be approved by
+yes   resolved  sDAI       22.62    0.55      44.71    2.08   Will 'KIP-81 be approved ('Yes') or rejected ('No') by Klero
+no    resolved  sDAI       13.06    0.31      25.80    1.20   Will 'GIP-128 Should GnosisDAO fund Gnosis Ltd with $30m yea
+yes   resolved  sDAI       12.10    0.29      23.91    1.11   Will 'GIP-128 Should GnosisDAO fund Gnosis Ltd with $30m yea
+yes   open      sDAI        9.04    0.22      17.87    0.83   Will GnosisPay reaches $5mil weekly volume?
+no    resolved  sDAI        8.04    0.19      15.90    0.74   Will GNO price be at or above 130 sDAI (Savings xDAI) at Dec
+no    resolved  sDAI        7.53    0.18      14.88    0.69   Will GIP-153 (transition Gnosis Chain into the Ethereum Econ
+yes   resolved  sDAI        7.04    0.17      13.92    0.65   Will GIP-153 (transition Gnosis Chain into the Ethereum Econ
+yes   resolved  sDAI        6.71    0.16      13.26    0.62   Will 'KIP-77 be approved ('Yes') or rejected ('No') by Klero
+no    resolved  sDAI        6.10    0.15      12.06    0.56   Will 'KIP-78 be approved ('Yes') or rejected ('No') by Klero
+All 251 pools, cost to move the price 10%: median 0.00, 90th pct 0.79, largest 2468.58; pools needing over 100: 3 (each pool's own currency token)
+Loss on full reversion is cost x (1 - 1/sqrt(1+margin)): 2.41% of cost at +5%, 4.65% at +10%.
