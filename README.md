@@ -15,7 +15,8 @@ The version submitted to the contest is commit `76c0420` (7 Nov 2026). The page 
 ├── measure.py            reads Seer's live pools on Gnosis and prices a push on each one
 ├── measure-output.txt    its output from the 14 Nov 2026 run
 ├── census.py             reads every poidh bounty on Base from the two poidh contracts
-└── census-output.txt     its output from the 14 Nov 2026 run
+├── census-output.txt     its output from the 14 Nov 2026 run
+└── LICENSE               MIT
 ```
 
 ## Verify it yourself
@@ -54,3 +55,7 @@ python3 -I census.py
 | Fee-to-token link | Design choice of this plan, not a Seer feature. |
 | Reality.eth bond ladder figures | Computed from the 2x bond rule. |
 | Revenue forecast | None given. The plan states break-even thresholds only. |
+
+## License
+
+MIT. See `LICENSE`.
