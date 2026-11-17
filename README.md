@@ -4,7 +4,7 @@ Entry for the Seer FAO Operating Plan Contest. Read it at
 https://yonkoo11.github.io/foreguild-operating-plan/ or as `foreguild-plan.pdf`.
 
 The version submitted to the contest is commit `76c0420` (7 Nov 2026). The page was last updated on
-16 Nov 2026; section 13 of the plan lists what changed.
+17 Nov 2026; section 13 of the plan lists what changed.
 
 ```
 .
@@ -40,7 +40,7 @@ python3 -I measure.py
 python3 -I census.py
 ```
 
-## What's real, and what we deliberately did not claim
+## Limitations: what is measured and what is not
 
 | Capability | Status |
 |---|---|
